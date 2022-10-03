@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        routeNumber = routeEditText.getText().toString();
+        routeNumber = routeEditText.getText().toString().toUpperCase(Locale.ROOT);
 
         KmbEtaServiceImpl kmbEtaService = KmbEtaServiceImpl.getInstance();
         CtbEtaServiceImpl ctbEtaService = CtbEtaServiceImpl.getInstance();
