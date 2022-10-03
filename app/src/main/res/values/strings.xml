@@ -1,0 +1,52 @@
+<resources>
+    <!-- App info -->
+    <string name="app_name">Check My Bus</string>
+
+    <!-- App descriptions -->
+    <string name="prompt_route_num">Type a route number!</string>
+    <string name="search">Search</string>
+    <string name="save">Save</string>
+    <string name="refresh">Refresh</string>
+    <string name="towards">TO</string>
+    <string name="select_out">Select outbound</string>
+    <string name="select_in">Select inbound</string>
+    <string name="select_company_description">Select bus company from below:</string>
+    <string name="scroll_stop_description">Scroll to select bus stop:</string>
+    <string name="eta_description">Next departure at: %1$s (in %2$d minutes)</string>
+    <string name="save_description">Save this result as notification at below date and time:</string>
+
+    <string-array name="company_array">
+        <item>Kowloon Motor Bus (KMB)</item>
+        <item>Citybus (CTB)</item>
+        <item>New World First Bus (NWFB)</item>
+    </string-array>
+
+    <!-- Day of week -->
+    <string name="sunday">Sunday</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+
+    <!-- Bus route/stop information -->
+    <string name="direction_outbound">outbound</string>
+    <string name="direction_inbound">inbound</string>
+
+    <!-- Bundle keys -->
+    <string name="bundle_company">Bundle company</string>
+    <string name="bundle_direction">Bundle direction</string>
+    <string name="bundle_bound">Bundle bound</string>
+    <string name="bundle_route_num">Bundle route number</string>
+    <string name="bundle_stop_name">Bundle stop name</string>
+    <string name="bundle_stop_id">Bundle stop ID</string>
+    <string name="bundle_stop_seq">Bundle stop seq</string>
+
+    <!-- Error message -->
+    <string name="application_exception">An exception occurred. Please retry later.</string>
+    <string name="wrong_route_number">Cannot find any route with this number.</string>
+    <string name="empty_input">Please provide an input in the box.</string>
+    <string name="eta_not_found">Cannot find any departure within 1 hour. Please retry later.</string>
+
+</resources>
