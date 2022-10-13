@@ -40,7 +40,9 @@
     <string name="bundle_bound">Bundle bound</string>
     <string name="bundle_route_num">Bundle route number</string>
     <string name="bundle_stop_name">Bundle stop name</string>
+    <string name="bundle_joint_stop_name">Bundle joint stop name</string>
     <string name="bundle_stop_id">Bundle stop ID</string>
+    <string name="bundle_joint_stop_id">Bundle joint stop ID</string>
     <string name="bundle_stop_seq">Bundle stop seq</string>
 
     <!-- Error message -->

@@ -9,10 +9,6 @@ public class RouteStopData {
     private String service_type;
     private String seq;
     private String stop;
-    // Names are inserted by calling Stop API
-    private String name_en;
-    private String name_tc;
-    private String name_sc;
     private String data_timestamp;
 
     public String getCo() {
@@ -69,30 +65,6 @@ public class RouteStopData {
 
     public void setStop(String stop) {
         this.stop = stop;
-    }
-
-    public String getName_en() {
-        return name_en;
-    }
-
-    public void setName_en(String name_en) {
-        this.name_en = name_en;
-    }
-
-    public String getName_tc() {
-        return name_tc;
-    }
-
-    public void setName_tc(String name_tc) {
-        this.name_tc = name_tc;
-    }
-
-    public String getName_sc() {
-        return name_sc;
-    }
-
-    public void setName_sc(String name_sc) {
-        this.name_sc = name_sc;
     }
 
     public String getData_timestamp() {

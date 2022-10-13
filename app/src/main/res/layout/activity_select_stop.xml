@@ -22,8 +22,7 @@
             android:fontFamily="monospace"
             android:foregroundGravity="center"
             android:gravity="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="30sp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textStyle="bold" />
 
         <TextView

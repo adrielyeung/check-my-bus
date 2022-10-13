@@ -1,7 +1,5 @@
 package com.adriel.checkmybus.model;
 
-import android.util.Log;
-
 import com.adriel.checkmybus.constants.Constants;
 import com.adriel.checkmybus.utils.DateUtils;
 
