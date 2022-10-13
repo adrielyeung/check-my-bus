@@ -1,5 +1,7 @@
 package com.adriel.checkmybus.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class StopData {
 
     private String stop;
@@ -7,6 +9,7 @@ public class StopData {
     private String name_tc;
     private String name_sc;
     private String lat;
+    @SerializedName("long")
     private String _long;
     private String data_timestamp;
 

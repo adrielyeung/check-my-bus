@@ -1,7 +1,5 @@
 package com.adriel.checkmybus.api;
 
-import android.util.Log;
-
 import com.adriel.checkmybus.callback.EtaReturnCallback;
 import com.adriel.checkmybus.callback.EtaReturnListener;
 import com.adriel.checkmybus.constants.Constants;
@@ -13,7 +11,6 @@ import com.adriel.checkmybus.model.StopETA;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.Path;
 
 public class CtbEtaServiceImpl {
 
@@ -78,7 +75,6 @@ public class CtbEtaServiceImpl {
                                EtaReturnListener<EtaReturnCallback<StopETA>> stopEtaCallbackListener) {
         // 4 - Get stop ETA by stop ID
         new Thread(() -> {
-            Log.d("URL", String.format("eta/%s/%s/%s", company, stopId, routeNumber));
             Call<StopETA> stopCall = ctbEtaService.getStopEtaById(company, stopId, routeNumber);
 
             EtaReturnCallback<StopETA> stopCallback = new EtaReturnCallback<>(stopEtaCallbackListener,

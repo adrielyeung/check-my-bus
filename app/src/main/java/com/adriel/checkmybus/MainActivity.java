@@ -24,6 +24,7 @@ import com.adriel.checkmybus.utils.ValidationUtils;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private String routeNumber;
     private Map<String, Route> companyRouteMap;
     private int invalidCount;
+    private int callbackCount;
     private String outboundDestination;
     private String inboundDestination;
 
@@ -68,52 +70,72 @@ public class MainActivity extends AppCompatActivity {
             case Constants.CALLBACK_EXCEPTION:
                 Toast.makeText(getApplicationContext(), getString(R.string.application_exception),
                         Toast.LENGTH_LONG).show();
-                return;
+                break;
             case Constants.CALLBACK_EMPTY_OUTPUT:
                 if (--invalidCount == 0) {
                     selectCompanyTextView.setText(getString(R.string.wrong_route_number));
                 }
-                return;
-            default:
                 break;
+            default:
+                companyRouteMap.put(routeCallback.getCompany(), routeCallback.getEtaReturnModel());
+                selectCompanyTextView.setText(getString(R.string.select_company_description));
+        }
+        if (--callbackCount == 0) {
+            addCompanyButtonsFromMap(Pattern.matches(Constants.JOINT_OPERATED_ROUTES, routeNumber));
+        }
+    }
+
+    private void addCompanyButtonsFromMap(boolean jointlyOperated) {
+        StringBuilder buttonText = new StringBuilder();
+        for (Map.Entry<String, Route> entry : companyRouteMap.entrySet()) {
+            String company = entry.getKey();
+            if (jointlyOperated) {
+                buttonText.append(company);
+                buttonText.append(Constants.COMPANY_SEPARATOR);
+            } else {
+                addCompanyButton(company);
+            }
         }
 
-        companyRouteMap.put(routeCallback.getCompany(), routeCallback.getEtaReturnModel());
-        selectCompanyTextView.setText(getString(R.string.select_company_description));
-        addCompanyButton(routeCallback.getCompany());
+        if (jointlyOperated && buttonText.length() > 0) {
+            // Trim the last 3 chars " / "
+            addCompanyButton(buttonText.substring(0, buttonText.length()-3));
+        }
     }
 
     private void addCompanyButton(String company) {
         Button button = new Button(getApplicationContext());
         button.setText(company.toUpperCase(Locale.ROOT));
+
+        button.setBackgroundTintList(AppCompatResources.getColorStateList(
+                getApplicationContext(), R.color.purple_500));
+        button.setTextColor(getResources().getColor(R.color.white));
+
         EtaReturnListener<EtaReturnCallback<RouteStop>> routeStopCallbackListener =
                 this::routeStopCallbackListener;
         switch (company) {
-            case Constants.KMB_COMPANY:
-                button.setOnClickListener(view -> {
-                    resetRoute(false, company);
-                    // 2 - Determine if route is circular (only outbound, no inbound stops)
-                    KmbEtaServiceImpl kmbEtaService = KmbEtaServiceImpl.getInstance();
-                    kmbEtaService.getAllStopsByRoute(routeNumber, getString(R.string.direction_inbound),
-                            routeStopCallbackListener);
-                    });
-                break;
             case Constants.CTB_COMPANY:
             case Constants.NWFB_COMPANY:
                 button.setOnClickListener(view -> {
                     resetRoute(false, company);
+                    // 2 - Determine if route is circular (only outbound, no inbound stops)
                     CtbEtaServiceImpl ctbEtaService = CtbEtaServiceImpl.getInstance();
                     ctbEtaService.getAllStopsByRoute(company, routeNumber, getString(R.string.direction_inbound),
                             routeStopCallbackListener);
                 });
                 break;
+            // For any jointly-operated route, company is e.g. "KMB / CTB" and will fall into default
+            // Default use KMB API to verify route
+            case Constants.KMB_COMPANY:
             default:
+                button.setOnClickListener(view -> {
+                    resetRoute(false, company);
+                    KmbEtaServiceImpl kmbEtaService = KmbEtaServiceImpl.getInstance();
+                    kmbEtaService.getAllStopsByRoute(routeNumber, getString(R.string.direction_inbound),
+                            routeStopCallbackListener);
+                });
                 break;
         }
-
-        button.setBackgroundTintList(AppCompatResources.getColorStateList(
-                getApplicationContext(), R.color.purple_500));
-        button.setTextColor(getResources().getColor(R.color.white));
 
         LinearLayout linearLayout = findViewById(R.id.companyLayout);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -155,7 +177,9 @@ public class MainActivity extends AppCompatActivity {
     private void resetRoute(boolean isSearchButton, String company) {
         if (isSearchButton) {
             invalidCount = 0;
+            callbackCount = 0;
             companyLayout.removeAllViews();
+            companyRouteMap.clear();
             selectCompanyTextView.setText("");
         }
         this.company = company;
@@ -192,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        routeNumber = routeEditText.getText().toString();
+        routeNumber = routeEditText.getText().toString().toUpperCase(Locale.ROOT);
 
         KmbEtaServiceImpl kmbEtaService = KmbEtaServiceImpl.getInstance();
         CtbEtaServiceImpl ctbEtaService = CtbEtaServiceImpl.getInstance();
@@ -202,11 +226,14 @@ public class MainActivity extends AppCompatActivity {
                 this::routeCallbackListener;
         kmbEtaService.getRouteByNumber(routeNumber, getString(R.string.direction_outbound), routeCallbackListener);
         invalidCount++;
+        callbackCount++;
         ctbEtaService.getRouteByNumber(Constants.CTB_COMPANY, routeNumber, routeCallbackListener);
         invalidCount++;
+        callbackCount++;
         // NWFB START
         ctbEtaService.getRouteByNumber(Constants.NWFB_COMPANY, routeNumber, routeCallbackListener);
         invalidCount++;
+        callbackCount++;
         // NWFB END
     };
 
