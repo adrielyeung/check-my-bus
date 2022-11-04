@@ -210,6 +210,12 @@ public class MainActivity extends AppCompatActivity {
     View.OnClickListener searchButtonListener = view -> {
         resetRoute(true, null);
 
+        // Hide keyboard after clicking Search
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+
         if (ValidationUtils.isEditTextEmpty(routeEditText)) {
             Toast.makeText(getApplicationContext(), getString(R.string.empty_input),
                     Toast.LENGTH_LONG).show();
