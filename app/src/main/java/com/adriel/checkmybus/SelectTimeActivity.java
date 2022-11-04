@@ -1,12 +1,16 @@
 package com.adriel.checkmybus;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
-import android.widget.RadioGroup;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import com.adriel.checkmybus.api.CtbEtaServiceImpl;
 import com.adriel.checkmybus.api.KmbEtaServiceImpl;
@@ -36,11 +40,18 @@ public class SelectTimeActivity extends AppCompatActivity {
     private TextView busStopTextView;
     private TextView etaTextView;
     private Button refreshButton;
-    private RadioGroup leftRadioGroup;
-    private RadioGroup rightRadioGroup;
-    private RadioGroup.OnCheckedChangeListener leftRadioGroupListener;
-    private RadioGroup.OnCheckedChangeListener rightRadioGroupListener;
+    private Button saveButton;
+    private LinearLayout leftCheckBoxPanel;
+    private CheckBox sundayCheckBox;
+    private CheckBox mondayCheckBox;
+    private CheckBox tuesdayCheckBox;
+    private CheckBox wednesdayCheckBox;
+    private CheckBox thursdayCheckBox;
+    private CheckBox fridayCheckBox;
+    private CheckBox saturdayCheckBox;
+    private LinearLayout rightCheckBoxPanel;
 
+    private boolean[] daySelected;
     private String company;
     private String routeNumber;
     private String direction;
@@ -66,29 +77,18 @@ public class SelectTimeActivity extends AppCompatActivity {
         busStopTextView = findViewById(R.id.busStopTextView);
         etaTextView = findViewById(R.id.etaTextView);
         refreshButton = findViewById(R.id.refreshButton);
-        leftRadioGroup = findViewById(R.id.leftRadioGroup);
-        rightRadioGroup = findViewById(R.id.rightRadioGroup);
-        leftRadioGroup.clearCheck();
-        rightRadioGroup.clearCheck();
-        // Reset all radio buttons from other group
-        leftRadioGroupListener = (radioGroup, checkedId) -> {
-            if (checkedId != -1) {
-                rightRadioGroup.setOnCheckedChangeListener(null);
-                rightRadioGroup.clearCheck();
-                rightRadioGroup.setOnCheckedChangeListener(rightRadioGroupListener);
-            }
-        };
+        saveButton = findViewById(R.id.saveButton);
+        leftCheckBoxPanel = findViewById(R.id.leftCheckboxPanel);
+        rightCheckBoxPanel = findViewById(R.id.rightCheckboxPanel);
+        sundayCheckBox = findViewById(R.id.sundayCheckBox);
+        mondayCheckBox = findViewById(R.id.mondayCheckBox);
+        tuesdayCheckBox = findViewById(R.id.tuesdayCheckBox);
+        wednesdayCheckBox = findViewById(R.id.wednesdayCheckBox);
+        thursdayCheckBox = findViewById(R.id.thursdayCheckBox);
+        fridayCheckBox = findViewById(R.id.fridayCheckBox);
+        saturdayCheckBox = findViewById(R.id.saturdayCheckBox);
 
-        rightRadioGroupListener = (radioGroup, checkedId) -> {
-            if (checkedId != -1) {
-                leftRadioGroup.setOnCheckedChangeListener(null);
-                leftRadioGroup.clearCheck();
-                leftRadioGroup.setOnCheckedChangeListener(leftRadioGroupListener);
-            }
-        };
-        leftRadioGroup.setOnCheckedChangeListener(leftRadioGroupListener);
-        rightRadioGroup.setOnCheckedChangeListener(rightRadioGroupListener);
-
+        daySelected = new boolean[7];
         params = getIntent().getExtras();
         company = params.getString(getString(R.string.bundle_company));
         companyTextView.setText(company.toUpperCase(Locale.ROOT));
@@ -104,9 +104,66 @@ public class SelectTimeActivity extends AppCompatActivity {
         busStopSeq = params.getString(getString(R.string.bundle_stop_seq));
         busStopTextView.setText(String.format("%s. %s", busStopSeq, busStopName));
 
+        saveButton.setOnClickListener(this::showTimePickerDialog);
         refreshButton.setOnClickListener(view -> getNextEta(busStopId, jointBusStopId));
 
+        sundayCheckBox.setOnClickListener(this::onCheckedChanged);
+        mondayCheckBox.setOnClickListener(this::onCheckedChanged);
+        tuesdayCheckBox.setOnClickListener(this::onCheckedChanged);
+        wednesdayCheckBox.setOnClickListener(this::onCheckedChanged);
+        thursdayCheckBox.setOnClickListener(this::onCheckedChanged);
+        fridayCheckBox.setOnClickListener(this::onCheckedChanged);
+        saturdayCheckBox.setOnClickListener(this::onCheckedChanged);
+
         getNextEta(busStopId, jointBusStopId);
+    }
+
+    private void onCheckedChanged(View v) {
+        boolean checked = ((CheckBox) v).isChecked();
+
+        switch (v.getId()) {
+            case R.id.sundayCheckBox:
+                daySelected[0] = checked;
+                break;
+            case R.id.mondayCheckBox:
+                daySelected[1] = checked;
+                break;
+            case R.id.tuesdayCheckBox:
+                daySelected[2] = checked;
+                break;
+            case R.id.wednesdayCheckBox:
+                daySelected[3] = checked;
+                break;
+            case R.id.thursdayCheckBox:
+                daySelected[4] = checked;
+                break;
+            case R.id.fridayCheckBox:
+                daySelected[5] = checked;
+                break;
+            case R.id.saturdayCheckBox:
+                daySelected[6] = checked;
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void showTimePickerDialog(View v) {
+        for (boolean day : daySelected) {
+            if (day) {
+                DialogFragment timePickerFragment = new TimePickerFragment(this::timePickerCallback);
+                timePickerFragment.show(getSupportFragmentManager(), "timePicker");
+                return;
+            }
+        }
+
+        Toast.makeText(getApplicationContext(), R.string.no_checkbox_checked,
+                Toast.LENGTH_LONG).show();
+    }
+
+    private void timePickerCallback(int hourPicked, int minPicked) {
+        Log.d("Hour", String.valueOf(hourPicked));
+        Log.d("Minute", String.valueOf(minPicked));
     }
 
     private void getNextEta(String stopId, String jointStopId) {
@@ -146,9 +203,6 @@ public class SelectTimeActivity extends AppCompatActivity {
                         Toast.LENGTH_LONG).show();
                 break;
             case Constants.CALLBACK_EMPTY_OUTPUT:
-//                if (--invalidCount == 0) {
-//                    etaTextView.setText(getString(R.string.eta_not_found));
-//                }
                 break;
             default:
                 // Each stop has multiple routes, each route has multiple departures

@@ -5,7 +5,7 @@
     <!-- App descriptions -->
     <string name="prompt_route_num">Type a route number!</string>
     <string name="search">Search</string>
-    <string name="save">Save</string>
+    <string name="select_time_and_save">Select time and save</string>
     <string name="refresh">Refresh</string>
     <string name="towards">TO</string>
     <string name="select_out">Select outbound</string>
@@ -13,7 +13,7 @@
     <string name="select_company_description">Select bus company from below:</string>
     <string name="scroll_stop_description">Scroll to select bus stop:</string>
     <string name="eta_description">Next departure at: %1$s (in %2$d minutes)</string>
-    <string name="save_description">Save this result as notification at below date and time:</string>
+    <string name="save_description">Choose a date and time to send you this ETA:</string>
 
     <string-array name="company_array">
         <item>Kowloon Motor Bus (KMB)</item>
@@ -49,6 +49,7 @@
     <string name="application_exception">An exception occurred. Please retry later.</string>
     <string name="wrong_route_number">Cannot find any route with this number.</string>
     <string name="empty_input">Please provide an input in the box.</string>
+    <string name="no_checkbox_checked">Please select one of the options above.</string>
     <string name="eta_not_found">Cannot find any departure within 1 hour. Please retry later.</string>
 
 </resources>

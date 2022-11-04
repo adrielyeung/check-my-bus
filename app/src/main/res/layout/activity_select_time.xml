@@ -95,81 +95,75 @@
         android:layout_weight="2"
         android:orientation="horizontal">
 
-        <RadioGroup
-            android:id="@+id/leftRadioGroup"
+        <LinearLayout
+            android:id="@+id/leftCheckboxPanel"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-            <RadioButton
-                android:id="@+id/sundayRadioButton"
+            <CheckBox
+                android:id="@+id/sundayCheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/sunday"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-            <RadioButton
-                android:id="@+id/mondayRadioButton"
+            <CheckBox
+                android:id="@+id/mondayCheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/monday"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-            <RadioButton
-                android:id="@+id/tuesdayRadioButton"
+            <CheckBox
+                android:id="@+id/tuesdayCheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/tuesday"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-            <RadioButton
-                android:id="@+id/wednesdayRadioButton"
+            <CheckBox
+                android:id="@+id/wednesdayCheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/wednesday"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-        </RadioGroup>
+        </LinearLayout>
 
-        <RadioGroup
-            android:id="@+id/rightRadioGroup"
+        <LinearLayout
+            android:id="@+id/rightCheckboxPanel"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-            <RadioButton
-                android:id="@+id/thursdayRadioButton"
+            <CheckBox
+                android:id="@+id/thursdayCheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/thursday"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-            <RadioButton
-                android:id="@+id/fridayRadioButton"
+            <CheckBox
+                android:id="@+id/fridayCheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/friday"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-            <RadioButton
-                android:id="@+id/saturdayRadioButton"
+            <CheckBox
+                android:id="@+id/saturdayCheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/saturday"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-        </RadioGroup>
-    </LinearLayout>
 
-    <EditText
-        android:id="@+id/editTextTime"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="10dp"
-        android:layout_weight="0.5"
-        android:ems="10"
-        android:inputType="time" />
+        </LinearLayout>
+    </LinearLayout>
 
     <Button
         android:id="@+id/saveButton"
@@ -178,7 +172,7 @@
         android:layout_margin="5dp"
         android:layout_weight="0.5"
         android:backgroundTint="#8BC34A"
-        android:text="@string/save"
+        android:text="@string/select_time_and_save"
         android:textColor="#004D40" />
 
 </LinearLayout>
